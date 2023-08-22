@@ -7,6 +7,6 @@
 	"background": {
 	  "service_worker": "bg-wrapper.js"
 	},
-	"permissions": [],
+	"permissions": ["activeTab", "storage"],
 	"action": {}
 }	

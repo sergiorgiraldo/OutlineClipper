@@ -1,8 +1,14 @@
 const form = document.querySelector('.create-clip');
 
+document.addEventListener('DOMContentLoaded', ()=>{
+  chrome.storage.local.get("outlineApiStg", function(item){
+    document.getElementById("outline-api-key").value = item.outlineApiStg;
+  });  
+});
+
 // New clip
 
-form.addEventListener('submit', (event) => {
+form.addEventListener('submit', (event)=>{
   event.preventDefault();
   const formData = new FormData(form);
   const data = Object.fromEntries(formData);
@@ -11,7 +17,8 @@ form.addEventListener('submit', (event) => {
   const outlineApiKey = data['outline-api-key'];
   const outlineCollection = data['outline-collection'];
   const outlinePage = data['outline-page'];
-  const urlToSave = document.location.href;
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlToSave = urlParams.get('u');
 
   manager.createClip(outlineApiKey, outlineCollection, outlinePage, urlToSave);
 });
@@ -36,6 +43,7 @@ class ClipManager {
   }
 
   createClip(outlineApiKey, outlineCollection, outlinePage, urlToSave) {
+    chrome.storage.local.set({ "outlineApiStg": outlineApiKey }, function(){});
     this.logMessage(`Created ${outlineApiKey}\n${outlineCollection}\n${outlinePage}\n${urlToSave}`);
   }
 }
