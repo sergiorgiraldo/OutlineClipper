@@ -1,0 +1,40 @@
+:root {
+  --card-min-width: 20em;
+  --card-max-width: 25em;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 16px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* clip creation form */
+
+.create-clip {
+  display: grid;
+  grid-template-columns: minmax(100px, 1fr) minmax(150px, 2fr);
+  column-gap: 20px;
+  row-gap: 10px;
+
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.create-clip__label {
+  text-align: right;
+  font-weight: bold;
+}
+
+.create-clip__header {
+  grid-column: 1 / -1;
+}
+
+.create-clip__submit {
+  grid-column: 1 / -1;
+  border: 2px solid inset;
+  cursor: pointer;
+}
