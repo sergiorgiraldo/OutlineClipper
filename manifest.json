@@ -1,6 +1,5 @@
 {
 	"manifest_version": 3,
-
 	"name": "Outline clipper",
 	"description": "Save page to Outine with readability",
 	"version": "1.0.0",
@@ -9,6 +8,9 @@
 	},
 	"permissions": [
 		"activeTab", 
-		"storage"],
-	"action": {}
+		"storage"
+	],
+	"action": {
+	},
+	"host_permissions": ["*://*.husk-dusk.nl/"]
 }	
