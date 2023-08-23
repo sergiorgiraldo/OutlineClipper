@@ -36,14 +36,18 @@ function loadCollections(){
       "Content-Type": "application/json",
       "Accept": "application/json",
     }    
-  }).then(function (response) {
+  })
+  .then(function (response) {
+    return response.text();
+  })
+  .then(function (json) {
     let selectElement = document.getElementById("outline-collection");
 
     while (selectElement.firstChild) {
       selectElement.removeChild(selectElement.firstChild);
     }
-
-    response.data.forEach(item => {
+    var o = JSON.parse(json);
+    o.data.forEach(item => {
       let optionElement = document.createElement("option");
       optionElement.value = item.id;
       optionElement.text = item.name;
