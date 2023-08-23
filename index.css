@@ -38,3 +38,8 @@ body {
   border: 2px solid inset;
   cursor: pointer;
 }
+
+#parsed-clip{
+  padding: 5px;
+  border: 1px solid black;
+}
