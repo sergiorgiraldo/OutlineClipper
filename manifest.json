@@ -12,5 +12,11 @@
 	],
 	"action": {
 	},
-	"host_permissions": ["*://*.husk-dusk.nl/"]
+	"host_permissions": ["*://*.husk-dusk.nl/"],
+	"icons": {
+		"16": "Husk-Dusk16.png",
+		"32": "Husk-Dusk32.png",
+		"48": "Husk-Dusk48.png",
+		"128": "Husk-Dusk128.png"
+	  }
 }	

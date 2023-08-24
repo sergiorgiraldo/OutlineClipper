@@ -25,6 +25,12 @@ document.getElementById("outline-api-key").addEventListener('change', ()=>{
   loadCollections();
 });
 
+function uuidv4() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
+}
+
 function loadCollections(){
   const key = document.getElementById("outline-api-key").value;
   if (key == "") return;
@@ -61,21 +67,7 @@ function loadCollections(){
 
 class ClipManager {
   constructor(d) {
-    this.logMessage('Outline clipper: initialized');
-  }
-
-  logMessage(message) {
-    const date = new Date();
-    const pad = (val, len = 2) => val.toString().padStart(len, '0');
-    const h = pad(date.getHours());
-    const m = pad(date.getMinutes());
-    const s = pad(date.getSeconds());
-    const ms = pad(date.getMilliseconds(), 3);
-    const time = `${h}:${m}:${s}.${ms}`;
-
-    const logLine = `[${time}] ${message}`;
-
-    console.log(logLine);
+    console.log('Outline clipper: initialized');
   }
 
   parseClip(){
@@ -98,8 +90,34 @@ class ClipManager {
   }
 
   createClip(outlineApiKey, outlineCollection, outlinePage) {
+    if (outlineApiKey == "") return;
+
     chrome.storage.local.set({ "outlineApiStg": outlineApiKey }, function(){});
-    this.logMessage(`Saved ${outlineCollection}/${outlinePage}`);
+    var turndownService = new TurndownService();
+    var markdown = turndownService.turndown(document.getElementById("parsed-clip"));
+    var data = {
+      "title": outlinePage,
+      "text": markdown,
+      "collectionId": outlineCollection,
+      "template": false,
+      "publish": true
+    };
+
+    fetch("https://husk-dusk.nl/api/documents.create",{
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + outlineApiKey,
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify(data)
+    })
+    .then(function (response) {
+      console.log(`Saved ${outlineCollection}/${outlinePage}`);
+    })
+    .catch(function (err) {
+      console.warn('Something went wrong.', err);
+    });
   }
 }
 
