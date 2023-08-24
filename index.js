@@ -1,12 +1,31 @@
+const _Endpoint = "https://husk-dusk.nl/api/";
+
+//********************************************************************/
+
 const form = document.querySelector('.create-clip');
+
+const Url = {
+  get get(){
+      var vars= {};
+      if(window.location.href.length!==0)
+          window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value){
+              key=decodeURIComponent(key);
+              if(typeof vars[key]==="undefined") {vars[key]= decodeURIComponent(value);}
+              else {vars[key]= [].concat(vars[key], decodeURIComponent(value));}
+          });
+      return vars;
+  }
+};
 
 document.addEventListener('DOMContentLoaded', ()=>{
   chrome.storage.local.get("outlineApiStg", function(item){
     document.getElementById("outline-api-key").value = item.outlineApiStg;
     loadCollections();
   });
-
+  const pageName = Url.get.n;
+  document.getElementById("outline-page").value = pageName;
   manager.parseClip();
+  document.getElementById("outline-collection").focus();
 });
 
 form.addEventListener('submit', (event)=>{
@@ -25,17 +44,11 @@ document.getElementById("outline-api-key").addEventListener('change', ()=>{
   loadCollections();
 });
 
-function uuidv4() {
-  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-  );
-}
-
 function loadCollections(){
   const key = document.getElementById("outline-api-key").value;
   if (key == "") return;
 
-  fetch("https://husk-dusk.nl/api/collections.list",{
+  fetch(_Endpoint + "collections.list",{
     method: "POST",
     headers: {
       "Authorization": "Bearer " + key,
@@ -71,8 +84,7 @@ class ClipManager {
   }
 
   parseClip(){
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlToSave = urlParams.get('u');
+    const urlToSave = Url.get.u;
   
     fetch(urlToSave).then(function (response) {
       return response.text();
@@ -103,7 +115,7 @@ class ClipManager {
       "publish": true
     };
 
-    fetch("https://husk-dusk.nl/api/documents.create",{
+    fetch(_Endpoint + "documents.create",{
       method: "POST",
       headers: {
         "Authorization": "Bearer " + outlineApiKey,
@@ -113,9 +125,13 @@ class ClipManager {
       body: JSON.stringify(data)
     })
     .then(function (response) {
-      console.log(`Saved ${outlineCollection}/${outlinePage}`);
+      alert(`Saved ${outlinePage}`);
+      
+      setTimeout(function(){
+        window.close();
+       },1000);
     })
-    .catch(function (err) {
+    .catch(function (err){
       console.warn('Something went wrong.', err);
     });
   }

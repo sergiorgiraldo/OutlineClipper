@@ -8,9 +8,15 @@
 }
 
 body {
+  font-size: 18px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input, select, button {
   font-size: 16px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 
 /* clip creation form */
 
@@ -34,7 +40,7 @@ body {
 }
 
 .create-clip__submit {
-  grid-column: 1 / -1;
+  grid-column: 2 / -2;
   border: 2px solid inset;
   cursor: pointer;
 }
@@ -42,4 +48,12 @@ body {
 #parsed-clip{
   padding: 5px;
   border: 1px solid black;
+}
+
+input{
+  width: 400px;
+}
+
+select{
+  width: 200px;
 }
